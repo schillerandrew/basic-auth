@@ -4,7 +4,7 @@
 const express = require('express');
 // const bcrypt = require('bcrypt');
 // const base64 = require('base-64');
-// const { Sequelize, DataTypes } = require('sequelize');
+const { Sequelize, DataTypes } = require('sequelize');
 
 // Prepare the express app
 const app = express();
@@ -17,7 +17,11 @@ app.use(express.json());
 // Process FORM input and put the data on req.body
 app.use(express.urlencoded({ extended: true }));
 
-const sequelize = new Sequelize(process.env.DATABASE_URL);
+const DATABASE_URL = process.env.NODE_ENV === 'test'
+  ? 'sqlite::memory'
+  : process.env.DATABASE_URL || 'postgres://localhost:5432/api-server';
+
+const sequelize = new Sequelize(DATABASE_URL);
 
 // Create a Sequelize model
 const Users = sequelize.define('User', {
@@ -87,5 +91,6 @@ app.post('/signin', async (req, res) => {
 
 module.exports = {
   server: app,
-  start: () => app.listen(PORT, () => console.log('listening on port', PORT)),
+  start: () => app.listen(PORT, console.log('listening on port', PORT)),
+  sequelize
 };

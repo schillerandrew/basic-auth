@@ -5,10 +5,7 @@
 let { start, sequelize } = require('./src/server.js');
 
 sequelize.sync()
-  .then(() => {
-    app.listen(PORT, () => console.log('server up'));
-  }).catch(e => {
-    console.error('Could not start server', e.message);
-  });
+  .then(() => console.log('server up'))
+  .catch(e => console.error('Could not start server', e.message));
 
   start();
