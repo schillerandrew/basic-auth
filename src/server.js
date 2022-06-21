@@ -3,8 +3,13 @@
 // 3rd Party Resources
 const express = require('express');
 // const bcrypt = require('bcrypt');
-// const base64 = require('base-64');
 const { Sequelize, DataTypes } = require('sequelize');
+
+
+const { Users } = require('./auth/models');
+const basicAuth = require('./auth/middleware');
+
+const authRouter = require('./auth/router');
 
 // Prepare the express app
 const app = express();
@@ -17,23 +22,7 @@ app.use(express.json());
 // Process FORM input and put the data on req.body
 app.use(express.urlencoded({ extended: true }));
 
-const DATABASE_URL = process.env.NODE_ENV === 'test'
-  ? 'sqlite::memory'
-  : process.env.DATABASE_URL || 'postgres://localhost:5432/api-server';
-
-const sequelize = new Sequelize(DATABASE_URL);
-
-// Create a Sequelize model
-const Users = sequelize.define('User', {
-  username: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  password: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  }
-});
+app.use(authRouter);
 
 // Signup Route -- create a new user
 // Two ways to test this route with httpie
@@ -44,7 +33,7 @@ app.post('/signup', async (req, res) => {
   try {
     req.body.password = await bcrypt.hash(req.body.password, 10);
     const record = await Users.create(req.body);
-    res.status(200).json(record);
+    res.status(201).json(record);
   } catch (e) { res.status(403).send('Error Creating User'); }
 });
 
@@ -80,7 +69,7 @@ app.post('/signin', async (req, res) => {
     const user = await Users.findOne({ where: { username: username } });
     const valid = await bcrypt.compare(password, user.password);
     if (valid) {
-      res.status(200).json(user);
+      res.status(200).json(req.user);
     }
     else {
       throw new Error('Invalid User');
