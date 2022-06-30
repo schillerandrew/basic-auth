@@ -11,5 +11,5 @@ const sequelize = new Sequelize(DATABASE_URL);
 
 module.exports = {
   sequelize,
-  Users: UsersModel(sequelize, DataTypes)
+  Users: UsersModel(sequelize, DataTypes),
 };

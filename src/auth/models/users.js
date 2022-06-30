@@ -8,22 +8,22 @@ const UsersModel = (sequelize, DataTypes) => {
     username: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true
+      unique: true,
     },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
-    }
+    },
   });
 
   // NEEDS A TRY CATCH
   users.authenticateBasic = async function (username, password) {
     const user = await this.findOne({where: { username } });
-    const valid = await bcrypt.compare(passord, user.password);
+    const valid = await bcrypt.compare(password, user.password);
     if (valid) {
       return user;
     }
-  }
+  };
   return users;
 };
 
