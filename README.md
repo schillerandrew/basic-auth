@@ -28,6 +28,7 @@ Deploy an Express server that implements Basic Authentication, with signup and s
 
 - [GitHub pull request](https://github.com/schillerandrew/basic-auth/pull/1)
 - [GitHub actions](https://github.com/schillerandrew/basic-auth/actions)
+- [Heroku app](https://schiller-lab6-basic-auth.herokuapp.com/)
 
 > ## Architecture
 
