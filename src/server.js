@@ -2,12 +2,13 @@
 
 // 3rd Party Resources
 const express = require('express');
-// const bcrypt = require('bcrypt');
-const { Sequelize, DataTypes } = require('sequelize');
+const bcrypt = require('bcrypt');
+const base64 = require('base-64');
+// const { Sequelize, DataTypes } = require('sequelize');
 
 
 const { Users } = require('./auth/models');
-const basicAuth = require('./auth/middleware');
+// const basicAuth = require('./auth/middleware');
 
 const authRouter = require('./auth/router');
 
@@ -81,5 +82,5 @@ app.post('/signin', async (req, res) => {
 module.exports = {
   server: app,
   start: () => app.listen(PORT, console.log('listening on port', PORT)),
-  sequelize
+  // sequelize
 };
